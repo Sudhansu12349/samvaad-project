@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMVAAD SETU</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: #2E5BBA;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-section img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+
+        .logo-text {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 15px; /* Reduced spacing */
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .nav-bar a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hamburger-menu {
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex-grow: 1; /* Makes main content take available space */
+        }
+        
+        /* Officer Search Section */
+        .officer-search-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .officer-search-title {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+        .officer-search-subtitle {
+            font-size: 1.2rem;
+            color: #5a6c7d;
+            margin-bottom: 30px;
+        }
+        .search-input-container {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e9ecef;
+        }
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            border-radius: 20px;
+            outline: none;
+            color: #2c3e50;
+        }
+        .search-btn {
+            background: #2E5BBA;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .search-btn:hover {
+            background: #1e4a9a;
+            transform: translateY(-1px);
+        }
+
+        /* Drafts Section */
+        .drafts-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .drafts-title {
+            font-size: 1.4rem;
+            color: #5a6c7d;
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-align: left;
+        }
+        .drafts-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .draft-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            overflow: hidden;
+        }
+        .draft-card {
+            background: white;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #2E5BBA;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .draft-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+        .draft-card h3 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+        .draft-meta {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .draft-description {
+            color: #495057;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: #2c3e50;
+            transition: all 0.2s ease;
+        }
+        .carousel-arrow:hover { 
+            background-color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .arrow-left { left: -60px; }
+        .arrow-right { right: -60px; }
+
+        /* AI Agent Chat Box */
+        .ai-agent { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .ai-toggle-btn {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, #2E5BBA 0%, #1e4a9a 100%);
+            border: none; color: white; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 5px 20px rgba(46, 91, 186, 0.3);
+            transition: all 0.3s ease;
+        }
+        .ai-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 91, 186, 0.4);
+        }
+        .ai-chat-box {
+            position: absolute; bottom: 80px; right: 0;
+            width: 350px; height: 450px; background: white;
+            border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none; flex-direction: column; overflow: hidden;
+        }
+        
+        /* New AI Speech Bubble */
+        .ai-speech-bubble {
+            position: absolute;
+            bottom: 10px;
+            right: 75px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            width: 220px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 1;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform-origin: right center;
+        }
+        .ai-speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent transparent transparent white;
+        }
+        .close-speech-bubble {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #adb5bd;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .close-speech-bubble:hover {
+            color: #2c3e50;
+        }
+
+
+        .chat-header {
+            background: #2E5BBA; color: white; padding: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #f8f9fa; }
+        .chat-input-area { padding: 15px; background: white; border-top: 1px solid #eee; }
+        .chat-input-container { display: flex; gap: 10px; }
+        .chat-input {
+            flex: 1; padding: 10px; border: 1px solid #ddd;
+            border-radius: 20px; outline: none;
+        }
+        .chat-send-btn {
+            background: #2E5BBA; border: none; color: white;
+            padding: 10px 15px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .message { margin-bottom: 15px; padding: 10px 15px; border-radius: 15px; max-width: 80%; }
+        .user-message { background: #2E5BBA; color: white; margin-left: auto; text-align: right; }
+        .ai-message { background: white; color: #2c3e50; border: 1px solid #eee; }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100%; width: 0; position: fixed; z-index: 2000;
+            top: 0; right: 0; background: white; overflow-x: hidden;
+            transition: 0.3s; padding-top: 60px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            padding: 15px 25px; text-decoration: none; font-size: 18px;
+            color: #2c3e50; display: block; transition: 0.3s;
+        }
+        .sidebar a:hover { background: #f8f9fa; color: #2E5BBA; }
+        .sidebar .closebtn {
+            position: absolute; top: 0; right: 25px;
+            font-size: 36px; margin-left: 50px; color: #2c3e50;
+        }
+        
+        /* Suggestions Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); z-index: 3000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #f5f7fa; padding: 30px; border-radius: 15px;
+            width: 90%; max-width: 700px; max-height: 80vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .modal-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #2c3e50; }
+        .modal-header-buttons { display: flex; align-items: center; gap: 15px; }
+        .modal-close-btn, .analyse-all-btn, .filter-btn {
+            background: none; border: none; font-size: 1.5rem;
+            cursor: pointer; color: #6c757d; transition: color 0.3s ease;
+        }
+        .modal-close-btn:hover { color: #2c3e50; }
+        .analyse-all-btn, .filter-btn {
+            font-size: 1rem; font-family: 'Montserrat', sans-serif;
+            font-weight: 600; color: white; padding: 10px 20px;
+            border-radius: 8px; transition: background 0.3s ease;
+        }
+        .analyse-all-btn { background: #2E5BBA; }
+        .analyse-all-btn:hover { background: #1e4a9a; }
+        .filter-btn { background: #6c757d; }
+        .filter-btn:hover { background: #5a6268; }
+
+        .suggestions-list { overflow-y: auto; padding-right: 15px; }
+        .suggestion-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; background: white; border-radius: 8px;
+            margin-bottom: 10px; border: 1px solid #e9ecef;
+        }
+        .suggestion-text { flex-grow: 1; margin-right: 15px; }
+        .analyse-one-btn {
+            background: #f8f9fa; border: 1px solid #dee2e6;
+            color: #495057; padding: 8px 15px; border-radius: 6px;
+            cursor: pointer; font-weight: 500; transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .analyse-one-btn:hover { background: #e9ecef; color: #2c3e50; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .nav-bar { display: none; }
+            .hamburger-menu { display: block; }
+            .draft-cards { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .left-section { flex-grow: 1; }
+            .right-section { flex-grow: 0; }
+            .logo-text { font-size: 1.2rem; }
+            .draft-cards { grid-template-columns: 1fr; }
+            .officer-search-title { font-size: 2rem; }
+            .ai-chat-box { width: calc(100vw - 40px); right: 20px; bottom: 70px; }
+            .carousel-arrow { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="left-section">
+            <div class="logo-section">
+                <img src="samvaadsetu.jpg" alt="Samvaad Setu Logo">
+                <div class="logo-text">SAMVAAD SETU</div>
+            </div>
+        </div>
+        
+        <div class="right-section">
+            <nav class="nav-bar">
+                <a href="index.html">Home</a>
+                <a href="compare.html" title="Compare suggestions of two drafts">Compare</a>
+                <a href="#" title="Analysis history">History</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="hamburger-menu" onclick="openNav()">☰</div>
+        </div>
+    </div>
+</header>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="drafts.html">All Drafts</a>
+    <a href="https://www.mca.gov.in" target="_blank">MOCA Website</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="policy.html">Terms and Conditions</a>
+</div>
+
+<div class="main-content">
+    <div class="officer-search-section">
+        <h1 class="officer-search-title">WELCOME TO SAMVAAD SETU</h1>
+        <p class="officer-search-subtitle">The Bridge of Communication</p>
+        
+        <div class="search-input-container">
+            <input type="text" class="search-input" placeholder="Search draft to analyze...">
+            <button class="search-btn">
+                 <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="drafts-section">
+        <h2 class="drafts-title">Recent Searches</h2>
+         <div class="drafts-container">
+            <button class="carousel-arrow arrow-left" onclick="prevDrafts()"><i class="fas fa-chevron-left"></i></button>
+            <div class="draft-cards" id="draftCardsContainer">
+                <!-- Draft cards will be populated by JavaScript -->
+            </div>
+            <button class="carousel-arrow arrow-right" onclick="nextDrafts()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- AI Agent -->
+<div class="ai-agent">
+    <div class="ai-speech-bubble" id="aiSpeechBubble">
+        <button class="close-speech-bubble" onclick="closeSpeechBubble(event)">&times;</button>
+        I am Samvaad AI... Ask your doubts related to drafts.
+    </div>
+    <button class="ai-toggle-btn" onclick="toggleAiChat(event)">
+        <i class="fas fa-robot"></i>
+    </button>
+    
+    <div class="ai-chat-box" id="aiChatBox">
+        <div class="chat-header">
+            <h4>AI Assistant</h4>
+            <button onclick="toggleAiChat(event)" style="background: none; border: none; color: white; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <strong>Samvaad AI:</strong> Hi! I'm here to help you with questions about drafts and policies. How can I assist you today?
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Type your message..." id="chatInput">
+                <button class="chat-send-btn" onclick="sendChatMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Suggestions Modal -->
+<div class="modal-overlay" id="suggestionsModal" onclick="closeSuggestionsModal(event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Suggestions</h2>
+            <div class="modal-header-buttons">
+                 <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+                 <button class="analyse-all-btn" id="analyseAllBtn">Analyse All</button>
+                 <button class="modal-close-btn" onclick="closeSuggestionsModal({target: document.getElementById('suggestionsModal')})">&times;</button>
+            </div>
+        </div>
+        <div class="suggestions-list" id="suggestionsList">
+            <!-- Suggestions will be populated here by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- ===== Footer Section ===== -->
+<footer style="background:#1c2e4a; color:white; text-align:center; padding:25px 15px; font-family:'Montserrat', sans-serif;">
+    <p style="font-size:1rem; margin-bottom:8px;">
+        © 2025 <strong>Samvaad Setu</strong> | Developed by <strong>Sutra Debuggers</strong>
+    </p>
+    <p style="margin-bottom:8px; font-size:0.9rem; color:#d0d6e2;">
+        Team Members: Siddhant Kaushik • Sudhansu Raj • Suman Mantry • Sneha Singh Yadav • Shreya Sahu • Sahil Kourav
+    </p>
+    <p style="margin-bottom:5px;">
+        <a href="aboutd.html" style="color:#ffcc00; text-decoration:none; font-weight:600;">About Developers</a>
+    </p>
+    <p style="font-size:0.85rem; color:#b0bac9;">
+        Prototype developed for <strong>Smart India Hackathon 2025</strong>  
+        Not an official MCA website.
+    </p>
+</footer>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+    }
+
+    const chatBox = document.getElementById("aiChatBox");
+    const speechBubble = document.getElementById("aiSpeechBubble");
+    let speechBubbleClosed = false;
+
+    function closeSpeechBubble(event) {
+        event.stopPropagation();
+        speechBubble.style.display = 'none';
+        speechBubbleClosed = true;
+    }
+    
+    function toggleAiChat(event) {
+        event.stopPropagation();
+        if (chatBox.style.display === "flex") {
+            chatBox.style.display = "none";
+            if (!speechBubbleClosed) {
+                speechBubble.style.display = "block";
+            }
+        } else {
+            chatBox.style.display = "flex";
+            speechBubble.style.display = "none";
+        }
+    }
+
+    function sendChatMessage() {
+        const input = document.getElementById("chatInput");
+        const message = input.value.trim();
+        
+        if (message) {
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            setTimeout(() => {
+                addChatMessage("I understand your question. Let me find the relevant information.", 'ai');
+            }, 1000);
+        }
+    }
+
+    function addChatMessage(text, sender) {
+        const messagesDiv = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}-message`;
+        
+        if (sender === 'user') {
+            messageDiv.innerHTML = `<strong>You:</strong> ${text}`;
+        } else {
+            messageDiv.innerHTML = `<strong>Samvaad AI:</strong> ${text}`;
+        }
+        
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+    
+    document.getElementById("chatInput").addEventListener('keypress', (e) => (e.key === 'Enter' && (e.preventDefault(), sendChatMessage())));
+    
+    document.addEventListener('click', function(event) {
+        const aiAgent = document.querySelector('.ai-agent');
+        if (chatBox.style.display === 'flex' && !aiAgent.contains(event.target)) {
+            chatBox.style.display = 'none';
+            if (!speechBubbleClosed) {
+                speechBubble.style.display = 'block';
+            }
+        }
+    });
+
+
+    // === DRAFTS CAROUSEL LOGIC ===
+    const allDrafts = [
+        { name: 'Companies (Amendment) Act, 2025', meta: 'Ministry of Corporate Affairs • Oct 2025', desc: 'Proposed changes to directorship, CSR compliance, and reporting standards.' },
+        { name: 'Insolvency and Bankruptcy Code (Second Amendment) Bill, 2025', meta: 'Ministry of Corporate Affairs • Sep 2025', desc: 'Introducing pre-packaged insolvency resolution for MSMEs.' },
+        { name: 'Limited Liability Partnership (Amendment) Rules, 2025', meta: 'Ministry of Corporate Affairs • Jul 2025', desc: 'Updates on decriminalization of offenses and the introduction of small LLPs.' },
+        { name: 'Competition (Amendment) Bill, 2025', meta: 'Ministry of Corporate Affairs • Jun 2025', desc: 'Revisions on deal value thresholds and settlement mechanisms.' },
+        { name: 'Investor Education and Protection Fund (Amendment) Rules, 2025', meta: 'Ministry of Corporate Affairs • May 2025', desc: 'Streamlining the process for claims and refunds from the IEPF.' }
+    ];
+
+    let currentDraftIndex = 0;
+    const cardsContainer = document.getElementById('draftCardsContainer');
+
+    function renderDrafts() {
+        cardsContainer.innerHTML = '';
+        let cardsToShow = window.innerWidth < 992 ? (window.innerWidth < 768 ? 1 : 2) : 3;
+        
+        for (let i = 0; i < cardsToShow; i++) {
+            const draftIndex = (currentDraftIndex + i) % allDrafts.length;
+            const draft = allDrafts[draftIndex];
+            const card = document.createElement('div');
+            card.className = 'draft-card';
+            card.onclick = () => openSuggestionsModal(draft.name);
+            card.innerHTML = `
+                <h3>${draft.name}</h3>
+                <div class="draft-meta">${draft.meta}</div>
+                <p class="draft-description">${draft.desc}</p>
+            `;
+            cardsContainer.appendChild(card);
+        }
+    }
+    
+    function nextDrafts() {
+        let cardsToShow = window.innerWidth < 992 ? (window.innerWidth < 768 ? 1 : 2) : 3;
+        currentDraftIndex = (currentDraftIndex + cardsToShow) % allDrafts.length;
+        renderDrafts();
+    }
+    
+    function prevDrafts() {
+        let cardsToShow = window.innerWidth < 992 ? (window.innerWidth < 768 ? 1 : 2) : 3;
+        currentDraftIndex = (currentDraftIndex - cardsToShow + allDrafts.length) % allDrafts.length;
+        renderDrafts();
+    }
+
+
+    // === SUGGESTIONS MODAL LOGIC (MOCK DATA) ===
+    const modal = document.getElementById('suggestionsModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const suggestionsList = document.getElementById('suggestionsList');
+    const analyseAllBtn = document.getElementById('analyseAllBtn');
+
+    const mockSuggestionsData = {
+        'Companies (Amendment) Act, 2025': [
+             { id: 1, suggestion: "Section 185 changes are too restrictive." },
+             { id: 2, suggestion: "Clarity is needed on 'significant beneficial owner'." }
+        ],
+        'Insolvency and Bankruptcy Code (Second Amendment) Bill, 2025': [
+             { id: 3, suggestion: "The timeline for MSMEs is not feasible." },
+             { id: 4, suggestion: "Cross-border insolvency framework needs more detail." }
+        ],
+        'Limited Liability Partnership (Amendment) Rules, 2025': [
+             { id: 5, suggestion: "Decriminalization is a positive step forward." },
+             { id: 6, suggestion: "The definition of a 'small LLP' should be broader." }
+        ],
+         'Competition (Amendment) Bill, 2025': [
+             { id: 7, suggestion: "Deal value thresholds should be indexed to inflation." }
+        ],
+        'Investor Education and Protection Fund (Amendment) Rules, 2025': [
+             { id: 8, suggestion: "The refund process is still too cumbersome for investors." }
+        ]
+    };
+
+    function openSuggestionsModal(draftName) {
+        modalTitle.textContent = `Suggestions for "${draftName}"`;
+        suggestionsList.innerHTML = '';
+        modal.style.display = 'flex';
+        
+        analyseAllBtn.onclick = () => { window.location.href = `i.html?table=${encodeURIComponent(draftName)}`; };
+        
+        const suggestions = mockSuggestionsData[draftName] || [];
+
+        if (suggestions.length === 0) {
+            suggestionsList.innerHTML = '<p>No suggestions found for this draft.</p>';
+            return;
+        }
+
+        suggestions.forEach(suggestion => {
+            const item = document.createElement('div');
+            item.className = 'suggestion-item';
+            item.innerHTML = `
+                <span class="suggestion-text">${suggestion.suggestion}</span>
+                <button class="analyse-one-btn" onclick="window.location.href='ii.html?table=${encodeURIComponent(draftName)}&id=${suggestion.id}'">Analyse</button>
+            `;
+            suggestionsList.appendChild(item);
+        });
+    }
+
+    function closeSuggestionsModal(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    document.querySelector('.modal-close-btn').onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    // Initial render & responsive resizing
+    window.addEventListener('resize', renderDrafts);
+    renderDrafts();
+</script>
+
+</body>
+</html>
+
