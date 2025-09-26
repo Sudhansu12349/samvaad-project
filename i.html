@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overall Analysis</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    /* Reset & Body */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        color: #2c3e50;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Header (from index.html) */
+    .header {
+        background: #2E5BBA;
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .header-content {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+    }
+    .left-section { display: flex; align-items: center; }
+    .logo-section { display: flex; align-items: center; gap: 15px; }
+    .logo-section img { width: 45px; height: 45px; border-radius: 50%; }
+    .logo-text { color: white; font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
+    .right-section { display: flex; align-items: center; gap: 15px; }
+    .nav-bar { display: flex; gap: 15px; align-items: center; margin-right: 15px; }
+    .nav-bar a { text-decoration: none; color: white; font-weight: 500; font-size: 1rem; transition: all 0.3s ease; padding: 8px 12px; border-radius: 5px; }
+    .nav-bar a:hover { background: rgba(255, 255, 255, 0.1); }
+    .hamburger-menu { font-size: 1.5rem; color: white; cursor: pointer; padding: 10px; border-radius: 5px; transition: all 0.3s ease; }
+    .hamburger-menu:hover { background: rgba(255, 255, 255, 0.1); }
+
+    /* Sidebar (from index.html) */
+    .sidebar {
+        height: 100%; width: 0; position: fixed; z-index: 2000;
+        top: 0; right: 0; background: white; overflow-x: hidden;
+        transition: 0.3s; padding-top: 60px;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #2c3e50; display: block; transition: 0.3s; }
+    .sidebar a:hover { background: #f8f9fa; color: #2E5BBA; }
+    .sidebar .closebtn { position: absolute; top: 0; right: 25px; font-size: 36px; margin-left: 50px; color: #2c3e50; }
+
+    /* Main Container & Themed Boxes */
+    .main-container {
+        padding: 40px 20px;
+        flex: 1;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    @media(min-width:768px){ .main-container { grid-template-columns: repeat(2, 1fr); } }
+    
+    .box {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+    }
+    .box h2 {
+        font-family:'Playfair Display', serif;
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #2c3e50;
+    }
+    .full-width { grid-column: 1 / -1; }
+    
+    /* Themed Modules */
+    .summary-content {
+        flex: 1;
+        background: #f8f9fa;
+        color: #495057;
+        padding: 15px;
+        border-radius: 8px;
+        line-height: 1.6;
+        white-space: pre-line;
+        overflow-y: auto;
+        height: 280px;
+    }
+    .chart-container {
+        position: relative;
+        margin: auto;
+        height: 280px;
+        width: 100%;
+        max-width: 280px;
+    }
+    .line-chart-container {
+        position: relative;
+        height: 350px;
+        width: 100%;
+    }
+    .comments-list {
+        height: 400px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-right: 10px;
+    }
+    .comment { 
+        background-color: #f8f9fa; 
+        border-radius: 8px; 
+        padding: 15px; 
+        line-height: 1.5; 
+        border-left: 3px solid #2E5BBA;
+    }
+    .comment p { margin: 0; line-height: 1.4; }
+    .comment p + p { margin-top: 8px; }
+
+    /* Themed Tabs */
+    .tabs-container {
+        display: flex;
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 20px;
+    }
+    .tab-btn {
+        padding: 10px 20px; cursor: pointer;
+        background-color: transparent; border: none;
+        color: #6c757d; font-family: 'Montserrat', sans-serif;
+        font-size: 1.1rem; font-weight: 600;
+        transition: color 0.3s, border-bottom 0.3s;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+    }
+    .tab-btn:hover { color: #2E5BBA; }
+    .tab-btn.active {
+        color: #2E5BBA;
+        border-bottom: 3px solid #2E5BBA;
+    }
+    .tab-panel { display: none; animation: fadeIn 0.5s; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    .wordcloud-container {
+        display: flex; justify-content: center; align-items: center;
+        min-height: 350px;
+    }
+    #wordcloudImg {
+        max-width: 100%; max-height: 350px;
+        object-fit: contain; border-radius: 8px;
+    }
+    #keywords { max-height: 300px; overflow-y: auto; padding-right: 10px; }
+    #keywordsList {
+        list-style: none; padding-left: 0;
+        display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    #keywordsList li {
+        background-color: #e9ecef; color: #495057;
+        padding: 8px 15px; border-radius: 20px; font-size: 0.95rem;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background-color: #adb5bd; border-radius: 20px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: #6c757d; }
+    
+    /* AI Agent (from index.html) */
+    .ai-agent { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+    .ai-toggle-btn {
+        width: 60px; height: 60px; border-radius: 50%;
+        background: linear-gradient(135deg, #2E5BBA 0%, #1e4a9a 100%);
+        border: none; color: white; font-size: 1.5rem; cursor: pointer;
+        box-shadow: 0 5px 20px rgba(46, 91, 186, 0.3);
+        transition: all 0.3s ease;
+    }
+    .ai-toggle-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(46, 91, 186, 0.4);
+    }
+    .ai-chat-box {
+        position: absolute; bottom: 80px; right: 0;
+        width: 350px; height: 450px; background: white;
+        border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: none; flex-direction: column; overflow: hidden;
+    }
+    .chat-header {
+        background: #2E5BBA; color: white; padding: 15px;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #f8f9fa; }
+    .chat-input-area { padding: 15px; background: white; border-top: 1px solid #eee; }
+    .chat-input-container { display: flex; gap: 10px; }
+    .chat-input {
+        flex: 1; padding: 10px; border: 1px solid #ddd;
+        border-radius: 20px; outline: none;
+    }
+    .chat-send-btn {
+        background: #2E5BBA; border: none; color: white;
+        padding: 10px 15px; border-radius: 50%; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .message { margin-bottom: 15px; padding: 10px 15px; border-radius: 15px; max-width: 80%; }
+    .user-message { background: #2E5BBA; color: white; margin-left: auto; text-align: right; }
+    .ai-message { background: white; color: #2c3e50; border: 1px solid #eee; }
+
+
+    /* Responsive */
+     @media (max-width: 992px) {
+        .nav-bar { display: none; }
+        .hamburger-menu { display: block; }
+    }
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="left-section">
+            <div class="logo-section">
+                <a href="index.html"><img src="samvaadsetu.jpg" alt="Samvaad Setu Logo"></a>
+                <div class="logo-text">SAMVAAD SETU</div>
+            </div>
+        </div>
+        <div class="right-section">
+            <nav class="nav-bar">
+                <a href="index.html">Home</a>
+                <a href="compare.html" title="Compare suggestions of two drafts">Compare</a>
+                <a href="#" title="Analysis history">History</a>
+                <a href="#">Download Report</a>
+            </nav>
+            <div class="hamburger-menu" onclick="openNav()">☰</div>
+        </div>
+    </div>
+</header>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="about.html">About Us</a>
+    <a href="drafts.html">All Drafts</a>
+    <a href="https://www.mca.gov.in" target="_blank">MOCA Website</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="policy.html">Terms and Conditions</a>
+</div>
+
+<div class="main-container">
+    <div class="box summary-box">
+        <h2>Overall Summary</h2>
+        <div id="overallSummary" class="summary-content"></div>
+    </div>
+
+    <div class="box chart-box">
+        <h2>Sentiment Distribution</h2>
+        <div class="chart-container">
+            <canvas id="sentimentPieChart"></canvas>
+        </div>
+    </div>
+
+    <div class="box chart-box full-width">
+        <h2>Sentiment Over Time</h2>
+        <div class="line-chart-container">
+            <canvas id="sentimentLineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="box comments-box full-width">
+        <h2>All User Comments</h2>
+        <div class="comments-list" id="commentTrack"></div>
+    </div>
+
+    <div class="box full-width">
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="openTab(event, 'wordcloud')">Word Cloud</button>
+            <button class="tab-btn" onclick="openTab(event, 'keywords')">Keywords</button>
+        </div>
+        <div id="wordcloud" class="tab-panel active">
+            <div class="wordcloud-container">
+                <img id="wordcloudImg" alt="Word cloud will be displayed here.">
+            </div>
+        </div>
+        <div id="keywords" class="tab-panel">
+            <ul id="keywordsList"></ul>
+        </div>
+    </div>
+</div>
+
+<div class="ai-agent">
+    <button class="ai-toggle-btn" onclick="toggleAiChat(event)">
+        <i class="fas fa-robot"></i>
+    </button>
+    <div class="ai-chat-box" id="aiChatBox">
+        <div class="chat-header">
+            <h4>AI Assistant</h4>
+            <button onclick="toggleAiChat(event)" style="background: none; border: none; color: white; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <strong>Samvaad AI:</strong> Hi! I'm here to help you.
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Type your message..." id="chatInput">
+                <button class="chat-send-btn" onclick="sendChatMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer style="background:#1c2e4a; color:white; text-align:center; padding:25px 15px; font-family:'Montserrat', sans-serif;">
+    <p style="font-size:1rem; margin-bottom:8px;">
+        © 2025 <strong>Samvaad Setu</strong> | Developed by <strong>Sutra Debuggers</strong>
+    </p>
+    <p style="margin-bottom:8px; font-size:0.9rem; color:#d0d6e2;">
+        Team Members: Siddhant Kaushik • Sudhansu Raj • Suman Mantry • Sneha Singh Yadav • Shreya Sahu • Sahil Kourav
+    </p>
+    <p style="margin-bottom:5px;">
+        <a href="aboutd.html" style="color:#ffcc00; text-decoration:none; font-weight:600;">About Developers</a>
+    </p>
+    <p style="font-size:0.85rem; color:#b0bac9;">
+        Prototype developed for <strong>Smart India Hackathon 2025</strong>  
+        Not an official MCA website.
+    </p>
+</footer>
+
+<script>
+// Sidebar, Tabs, and AI Chat functions
+function openNav(){ document.getElementById("mySidebar").style.width="250px"; }
+function closeNav(){ document.getElementById("mySidebar").style.width="0"; }
+function openTab(evt, tabName) {
+    const tabPanels = document.getElementsByClassName("tab-panel");
+    for (let i = 0; i < tabPanels.length; i++) { tabPanels[i].classList.remove("active"); }
+    const tabBtns = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < tabBtns.length; i++) { tabBtns[i].classList.remove("active"); }
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
+const chatBox = document.getElementById("aiChatBox");
+function toggleAiChat(event) {
+    event.stopPropagation();
+    chatBox.style.display = (chatBox.style.display === "flex") ? "none" : "flex";
+}
+function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    if (input.value.trim()) {
+        addChatMessage(input.value, 'user');
+        input.value = '';
+        setTimeout(() => addChatMessage("Thanks for your message!", 'ai'), 1000);
+    }
+}
+function addChatMessage(text, sender) {
+    const messagesDiv = document.getElementById("chatMessages");
+    const msg = document.createElement("div");
+    msg.className = `message ${sender}-message`;
+    msg.innerHTML = `<strong>${sender === 'user' ? 'You' : 'Samvaad AI'}:</strong> ${text}`;
+    messagesDiv.appendChild(msg);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+document.getElementById("chatInput").addEventListener('keypress', (e) => (e.key === 'Enter' && (e.preventDefault(), sendChatMessage())));
+document.addEventListener('click', (e) => {
+    if (chatBox.style.display === 'flex' && !document.querySelector('.ai-agent').contains(e.target)) {
+        chatBox.style.display = 'none';
+    }
+});
+
+
+// --- MOCK DATA & PROTOTYPE LOGIC ---
+function loadData(){
+    const mockData = {
+        comments: [
+            { id: 1, suggestion: "The new compliance rules are a step in the right direction but need clearer guidelines for small businesses." },
+            { id: 2, suggestion: "I found the user interface for filing returns to be very confusing and slow. This needs a complete overhaul." },
+            { id: 3, suggestion: "This is a great initiative that will improve transparency. I fully support it." },
+            { id: 4, suggestion: "The deadline is too short. Please consider extending it by at least 30 days to allow for proper implementation." }
+        ]
+    };
+    const mockAnalysis = {
+        results: [
+            { summary: "Positive about new rules but requests clearer guidelines.", sentiment: "Neutral" },
+            { summary: "Negative feedback on the user interface.", sentiment: "Negative" },
+            { summary: "Strongly positive, supporting transparency.", sentiment: "Positive" },
+            { summary: "Requests a deadline extension.", sentiment: "Neutral" }
+        ],
+        wordcloud_url: "https://i.ibb.co/3kC7fV3/wordcloud.png"
+    };
+    
+    document.getElementById("overallSummary").innerText = mockAnalysis.results.map(r=>r.summary).join(" ");
+
+    const pos = mockAnalysis.results.filter(r=>r.sentiment==="Positive").length;
+    const neg = mockAnalysis.results.filter(r=>r.sentiment==="Negative").length;
+    const neu = mockAnalysis.results.filter(r=>r.sentiment==="Neutral").length;
+    
+    new Chart(document.getElementById("sentimentPieChart"), {
+        type:'doughnut',
+        data:{ 
+            labels:['Positive','Negative','Neutral'], 
+            datasets:[{ data:[pos,neg,neu], backgroundColor:['#28a745','#dc3545','#ffc107'], borderColor: 'white', borderWidth: 4 }] 
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#2c3e50' } } } }
+    });
+
+    const lineData = mockAnalysis.results.map(r => (r.sentiment === "Positive") ? 1 : (r.sentiment === "Negative" ? -1 : 0));
+    
+    new Chart(document.getElementById("sentimentLineChart"), {
+        type:'line',
+        data:{
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets:[{ label:'Sentiment Trend', data: lineData, borderColor:'#2E5BBA', backgroundColor:'rgba(46, 91, 186, 0.1)', tension:0.3, fill: true }]
+        },
+        options:{
+            responsive: true, maintainAspectRatio: false,
+            scales:{ 
+                y:{ 
+                    title: { display: true, text: 'Sentiment of People', color: '#2c3e50' },
+                    ticks:{ stepSize:1, color: '#2c3e50', callback: (v) => (v === 1 ? 'Positive' : (v === 0 ? 'Neutral' : 'Negative')) } 
+                },
+                x: { 
+                    title: { display: true, text: 'Time', color: '#2c3e50' },
+                    ticks: { color: '#2c3e50' } 
+                }
+            },
+            plugins: { legend: { labels: { color: '#2c3e50' } } }
+        }
+    });
+
+    const track = document.getElementById("commentTrack");
+    track.innerHTML = "";
+    mockData.comments.forEach((c,i)=>{
+        const div = document.createElement("div");
+        div.className="comment";
+        div.innerHTML = `<p>${c.suggestion}</p><p style="margin-top:10px; opacity:0.8;"><b>Summary:</b> ${mockAnalysis.results[i].summary}</p><p><b>Sentiment:</b> ${mockAnalysis.results[i].sentiment}</p>`;
+        track.appendChild(div);
+    });
+
+    document.getElementById("wordcloudImg").src = mockAnalysis.wordcloud_url;
+    
+    const commentsText = mockData.comments.map(c => c.suggestion).join(" ");
+    const freq={};
+    commentsText.toLowerCase().replace(/[^a-z\s]/gi, '').split(/\s+/).forEach(w=>{ if(w.length>3) freq[w]=(freq[w]||0)+1; });
+    const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const list = document.getElementById("keywordsList");
+    list.innerHTML="";
+    top.forEach(([k,v])=>{ const li=document.createElement("li"); li.textContent=`${k} (${v})`; list.appendChild(li); });
+}
+
+loadData();
+</script>
+
+</body>
+</html>
